@@ -2,13 +2,15 @@ import { useReducer } from 'react';
 
 type State = {
   count: number;
-
 };
 
-type Acition = State;
+type Acition = Partial<State> | ((state: State) => Partial<State>);
 
 function countReducer(state: State, action: Acition) {
-  return { ...state, ...action };
+  return {
+    ...state,
+    ...(typeof action === 'function' ? action(state) : action)
+  };
 }
 
 export default function Counter({ intialState = 0, step = 1 }) {
@@ -17,8 +19,8 @@ export default function Counter({ intialState = 0, step = 1 }) {
   });
   const { count } = state;
 
-  const incement = () => setState({ count: count + step });
-  const decrement = () => setState({ count: count - step });
+  const incement = () => setState(current => ({ count: current.count + step }));
+  const decrement = () => setState(current => ({ count: current.count - step }));
 
   return (
     <>
