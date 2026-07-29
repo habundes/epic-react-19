@@ -1,14 +1,24 @@
 import { useReducer } from 'react';
 
-function countReducer(count: number, change: number) {
-  return count + change;
+type State = {
+  count: number;
+
+};
+
+type Acition = State;
+
+function countReducer(state: State, action: Acition) {
+  return { ...state, ...action };
 }
 
 export default function Counter({ intialState = 0, step = 1 }) {
-  const [count, changeCount] = useReducer(countReducer, intialState);
+  const [state, setState] = useReducer(countReducer, {
+    count: intialState,
+  });
+  const { count } = state;
 
-  const incement = () => changeCount(step);
-  const decrement = () => changeCount(-step);
+  const incement = () => setState({ count: count + step });
+  const decrement = () => setState({ count: count - step });
 
   return (
     <>
@@ -18,7 +28,7 @@ export default function Counter({ intialState = 0, step = 1 }) {
       <button type="button" onClick={decrement}>
         -
       </button>
-      <p>Count is {count}</p>
+      <p>Count is { count }</p>
     </>
   );
 }
