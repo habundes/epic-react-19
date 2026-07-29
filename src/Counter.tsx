@@ -4,23 +4,32 @@ type State = {
   count: number;
 };
 
-type Acition = Partial<State> | ((state: State) => Partial<State>);
+type Acition = { type: 'increment'; step: number } | { type: 'decrement'; step: number }
 
 function countReducer(state: State, action: Acition) {
-  return {
-    ...state,
-    ...(typeof action === 'function' ? action(state) : action)
-  };
+  const { step, type } = action;
+  switch(type) {
+    case 'increment':
+      return {
+        ...state,
+        count: state.count + step,
+      }
+    case 'decrement':
+      return {
+        ...state,
+        count: state.count - step,
+      }
+  }
 }
 
 export default function Counter({ intialState = 0, step = 1 }) {
-  const [state, setState] = useReducer(countReducer, {
+  const [state, dispatch] = useReducer(countReducer, {
     count: intialState,
   });
   const { count } = state;
 
-  const incement = () => setState(current => ({ count: current.count + step }));
-  const decrement = () => setState(current => ({ count: current.count - step }));
+  const incement = () => dispatch({ type: 'increment', step });
+  const decrement = () => dispatch({ type: 'decrement', step });
 
   return (
     <>
