@@ -2,7 +2,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
-import Counter from './Counter'
+import Game from './tic-tac-toe/Game'
 
 
 function App() {
@@ -18,7 +18,8 @@ function App() {
         <div>
           <h1>Get started</h1>
         </div>
-        <Counter />
+        {/* <Counter /> */}
+        <Game />
       </section>
     </>
   )
